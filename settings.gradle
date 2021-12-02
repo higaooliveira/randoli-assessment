@@ -1,0 +1,5 @@
+rootProject.name = 'randoli-assessment'
+include 'app'
+include 'domain'
+include 'infrastructure'
+
