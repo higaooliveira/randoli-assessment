@@ -1,14 +1,18 @@
 package services;
 
+import model.EventModel;
+
+import java.util.List;
+
 public interface EventService {
 
-    String getAll();
+    List<EventModel> getAll();
 
-    void getById();
+    EventModel getById();
 
-    void save();
+    EventModel save(EventModel eventmodel);
 
-    void update();
+    EventModel update();
 
     void delete();
 }

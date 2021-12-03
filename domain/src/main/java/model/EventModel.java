@@ -6,7 +6,6 @@ import java.util.UUID;
 
 @Data
 public class EventModel {
-    private UUID eventId;
 
     private UUID transId;
 

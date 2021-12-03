@@ -1,0 +1,13 @@
+version: '3.3'
+
+services:
+  db:
+    container_name: db_container
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: randoli-assessment
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: randoli-assessment
+    ports:
+      - 5432:5432
