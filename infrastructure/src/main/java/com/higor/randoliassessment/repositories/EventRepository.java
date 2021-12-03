@@ -1,6 +1,6 @@
-package repositories;
+package com.higor.randoliassessment.repositories;
 
-import entities.Event;
+import com.higor.randoliassessment.entities.Event;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;

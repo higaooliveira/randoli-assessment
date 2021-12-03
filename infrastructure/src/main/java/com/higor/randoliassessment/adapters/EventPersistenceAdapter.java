@@ -1,25 +1,23 @@
-package adapters;
+package com.higor.randoliassessment.adapters;
 
-import entities.Event;
+import com.higor.randoliassessment.entities.Event;
 import lombok.AllArgsConstructor;
-import mapper.EventMapper;
-import model.EventModel;
+import com.higor.randoliassessment.mapper.EventMapper;
+import com.higor.randoliassessment.model.EventModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Component;
-import ports.EventPersistencePort;
-import repositories.EventRepository;
+import com.higor.randoliassessment.ports.EventPersistencePort;
+import com.higor.randoliassessment.repositories.EventRepository;
 
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@ComponentScan(basePackages={"repositories"})
-@EnableJpaRepositories("repositories")
-@EntityScan("entities")
+@ComponentScan(basePackages={"com.higor.randoliassessment"})
 @Component
 @AllArgsConstructor
 public class EventPersistenceAdapter implements EventPersistencePort {

@@ -1,4 +1,4 @@
-package model;
+package com.higor.randoliassessment.model;
 
 import lombok.Data;
 

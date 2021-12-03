@@ -1,6 +1,6 @@
-package services;
+package com.higor.randoliassessment.services;
 
-import model.EventModel;
+import com.higor.randoliassessment.model.EventModel;
 
 import java.util.List;
 

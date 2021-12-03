@@ -1,10 +1,10 @@
 package com.higor.randoliassessment.controller;
 
-import model.EventModel;
+import com.higor.randoliassessment.model.EventModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import services.EventService;
+import com.higor.randoliassessment.services.EventService;
 
 import java.util.List;
 
@@ -14,7 +14,6 @@ public class EventController {
 
     @Autowired
     private EventService eventService;
-
 
     @GetMapping("/event")
     public ResponseEntity<List<EventModel>> getAllEvents() {

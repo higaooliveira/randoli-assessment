@@ -1,9 +1,8 @@
-package services;
+package com.higor.randoliassessment.services;
 
-import jdk.jfr.Event;
+import com.higor.randoliassessment.model.EventModel;
 import lombok.AllArgsConstructor;
-import model.EventModel;
-import ports.EventPersistencePort;
+import com.higor.randoliassessment.ports.EventPersistencePort;
 
 import javax.inject.Inject;
 import javax.inject.Named;

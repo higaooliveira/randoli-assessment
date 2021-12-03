@@ -1,7 +1,7 @@
-package mapper;
+package com.higor.randoliassessment.mapper;
 
-import entities.Event;
-import model.EventModel;
+import com.higor.randoliassessment.entities.Event;
+import com.higor.randoliassessment.model.EventModel;
 import org.mapstruct.Mapper;
 import org.springframework.stereotype.Component;
 

@@ -1,4 +1,4 @@
-package exceptions;
+package com.higor.randoliassessment.exceptions;
 
 import java.util.UUID;
 

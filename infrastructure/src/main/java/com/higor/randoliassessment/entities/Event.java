@@ -1,4 +1,4 @@
-package entities;
+package com.higor.randoliassessment.entities;
 
 
 import lombok.AllArgsConstructor;

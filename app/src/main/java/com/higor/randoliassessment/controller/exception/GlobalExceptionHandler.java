@@ -1,8 +1,8 @@
 package com.higor.randoliassessment.controller.exception;
 
 
-import exceptions.ResourceNotFound;
-import model.StandardError;
+import com.higor.randoliassessment.exceptions.ResourceNotFound;
+import com.higor.randoliassessment.model.StandardError;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

@@ -1,6 +1,6 @@
-package ports;
+package com.higor.randoliassessment.ports;
 
-import model.EventModel;
+import com.higor.randoliassessment.model.EventModel;
 
 import java.util.List;
 import java.util.UUID;
