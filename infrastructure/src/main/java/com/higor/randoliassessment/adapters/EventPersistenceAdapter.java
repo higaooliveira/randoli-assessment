@@ -1,14 +1,14 @@
 package com.higor.randoliassessment.adapters;
 
 import com.higor.randoliassessment.entities.Event;
+import com.higor.randoliassessment.exceptions.ResourceNotFound;
+import com.higor.randoliassessment.mapper.Mapper;
 import lombok.AllArgsConstructor;
-import com.higor.randoliassessment.mapper.EventMapper;
 import com.higor.randoliassessment.model.EventModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import com.higor.randoliassessment.ports.EventPersistencePort;
 import com.higor.randoliassessment.repositories.EventRepository;
@@ -26,32 +26,48 @@ public class EventPersistenceAdapter implements EventPersistencePort {
     @Qualifier("eventRepository")
     private final EventRepository eventRepository;
 
-    @Qualifier("eventMapperImpl")
     @Autowired
-    private final EventMapper mapper;
+    @Qualifier("mapper")
+    private final Mapper mapper;
+
+    @Override
+    public EventModel getById(UUID id) {
+        return this.eventRepository
+            .findById(id)
+            .map(mapper::convert)
+            .orElseThrow(() -> new ResourceNotFound(id));
+    }
+
 
     @Override
     public EventModel save(EventModel eventModel) {
-        Event event = mapper.toEntity(eventModel);
-        return mapper.toModel(this.eventRepository.save(event));
+        Event event = this.mapper.convert(eventModel);
+        return this.mapper.convert(this.eventRepository.save(event));
     }
 
     @Override
     public List<EventModel> getAll() {
         return this.eventRepository
-                .findAll()
-                .stream()
-                .map(this.mapper::toModel)
-                .collect(Collectors.toList());
+            .findAll()
+            .stream()
+            .map(this.mapper::convert)
+            .collect(Collectors.toList());
     }
 
     @Override
     public EventModel update(EventModel eventModel) {
-        return null;
+        Event event = mapper.convert(eventModel);
+
+        return mapper.convert(this.eventRepository.save(event));
     }
 
     @Override
     public void delete(UUID eventId) {
-
+        try {
+            this.eventRepository.deleteById(eventId);
+        }catch (EmptyResultDataAccessException ex) {
+            throw new ResourceNotFound(eventId);
+        }
     }
+
 }

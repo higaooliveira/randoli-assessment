@@ -1,12 +1,10 @@
 package com.higor.randoliassessment.entities;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -14,9 +12,11 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
+@Builder
 @Table(name="event")
+public class Event implements Serializable {
+    private static final long serialVersionUID = 1L;
 
-public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID eventId;

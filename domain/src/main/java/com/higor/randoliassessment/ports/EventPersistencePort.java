@@ -8,6 +8,8 @@ import java.util.UUID;
 
 public interface EventPersistencePort {
 
+    EventModel getById(UUID id);
+
     EventModel save(EventModel eventModel);
 
     List<EventModel> getAll();

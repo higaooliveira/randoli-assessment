@@ -17,10 +17,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ResourceNotFound.class)
     public ResponseEntity<StandardError> resourceNotFound(ResourceNotFound ex, HttpServletRequest request) {
         StandardError error = StandardError.builder()
-                .message(ex.getLocalizedMessage())
-                .path(request.getRequestURI())
-                .timestamp(Instant.now())
-                .build();
+            .message(ex.getLocalizedMessage())
+            .path(request.getRequestURI())
+            .timestamp(Instant.now())
+            .build();
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
 
