@@ -3,6 +3,7 @@ package com.higor.randoliassessment.controller.exception;
 
 import com.higor.randoliassessment.exceptions.ResourceNotFound;
 import com.higor.randoliassessment.model.StandardError;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -15,6 +16,7 @@ import java.time.Instant;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFound.class)
+    @ApiResponse(responseCode = "404", description = "Resource not Found")
     public ResponseEntity<StandardError> resourceNotFound(ResourceNotFound ex, HttpServletRequest request) {
         StandardError error = StandardError.builder()
             .message(ex.getLocalizedMessage())
