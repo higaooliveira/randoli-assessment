@@ -1,13 +1,43 @@
-version: '3.3'
+version: '3.8'
 
 services:
   db:
     container_name: db_container
     image: postgres
-    restart: always
+    restart: on-failure
     environment:
       POSTGRES_USER: randoli-assessment
-      POSTGRES_PASSWORD: root
+      POSTGRES_PASSWORD: teste
       POSTGRES_DB: randoli-assessment
     ports:
       - 5432:5432
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U randoli-assessment && psql -U randoli-assessment --list" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - randoli-assessment
+
+  app:
+    container_name: randoli-assessment
+    depends_on:
+      db:
+        condition: service_healthy
+    links:
+      - db
+    build:
+      context: ./
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db_container:5432/randoli-assessment?createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_USERNAME=randoli-assessment
+      - SPRING_DATASOURCE_PASSWORD=teste
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_SHOW_SQL=false
+    ports:
+      - 8080:8080
+    networks:
+      - randoli-assessment
+
+networks:
+  randoli-assessment:
