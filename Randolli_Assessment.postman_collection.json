@@ -1,0 +1,118 @@
+{
+	"info": {
+		"_postman_id": "f3c1c1c4-07c8-4798-b146-5e9c3097e2a1",
+		"name": "Randolli Assessment",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Events",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/api/event",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"event"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create Event",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"transId\":\"0000abf8-d1f5-4536-8fb0-36fe934b1f28\",\n    \"transTms\": \"20151022102011927EDT\",\n    \"rcNum\": \"1002\",\n    \"clientId\": \"RPS-0001\",\n    \"eventCnt\": 1,\n    \"locationCd\": \"DESTINATION\",\n    \"locationId1\": \"T8C\",\n    \"locationId2\": \"1J7\",\n    \"addrNbr\": \"0000000001\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/api/event",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"event"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Event By Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/api/event/89c65e41-7832-4fe3-bf73-af145beb8a18",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"event",
+						"89c65e41-7832-4fe3-bf73-af145beb8a18"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Event",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"eventId\": \"89c65e41-7832-4fe3-bf73-af145beb8a18\",\n    \"transId\":\"0000abf8-d1f5-4536-8fb0-36fe934b1f28\",\n    \"transTms\": \"Teste\",\n    \"rcNum\": \"1002\",\n    \"clientId\": \"RPS-0001\",\n    \"eventCnt\": 1,\n    \"locationCd\": \"DESTINATION\",\n    \"locationId1\": \"T8C\",\n    \"locationId2\": \"1J7\",\n    \"addrNbr\": \"0000000001\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/api/event",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"event"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create Batch",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": null
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Event",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": null
+			},
+			"response": []
+		}
+	]
+}
