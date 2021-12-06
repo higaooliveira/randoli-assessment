@@ -12,6 +12,8 @@ public interface EventPersistencePort {
 
     EventModel save(EventModel eventModel);
 
+    List<EventModel> saveMany(List<EventModel> eventModels);
+
     List<EventModel> getAll();
 
     EventModel update(EventModel eventModel);

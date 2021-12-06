@@ -1,5 +1,6 @@
 package com.higor.randoliassessment.services;
 
+import com.higor.randoliassessment.model.BatchEventModel;
 import com.higor.randoliassessment.model.EventModel;
 
 import java.util.List;
@@ -13,6 +14,8 @@ public interface EventService {
     EventModel getById(UUID id);
 
     EventModel save(EventModel eventmodel);
+
+    List<EventModel> saveMany(BatchEventModel batchEventModel);
 
     EventModel update(EventModel eventModel);
 

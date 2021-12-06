@@ -1,8 +1,10 @@
 package com.higor.randoliassessment.controller;
 
+import com.higor.randoliassessment.model.BatchEventModel;
 import com.higor.randoliassessment.model.EventModel;
 import com.higor.randoliassessment.services.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,6 +41,12 @@ public class EventController {
             .body(createdEvent);
     }
 
+    @PostMapping("/batch")
+    public ResponseEntity<List<EventModel>> saveMany(@RequestBody BatchEventModel batchEventModel) {
+        List<EventModel> createdEvents = this.eventService.saveMany(batchEventModel);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdEvents);
+    }
     @PutMapping
     public ResponseEntity<EventModel> update(@RequestBody EventModel eventModel) {
         EventModel updatedEvent = this.eventService.update(eventModel);

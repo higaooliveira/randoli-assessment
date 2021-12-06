@@ -2,7 +2,9 @@ package com.higor.randoliassessment.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.higor.randoliassessment.entities.Event;
+import com.higor.randoliassessment.model.BatchEventModel;
 import com.higor.randoliassessment.model.EventModel;
+import com.higor.randoliassessment.model.Record;
 import com.higor.randoliassessment.repositories.EventRepository;
 import java.util.List;
 import java.util.UUID;
@@ -148,6 +150,49 @@ class EventControllerTest {
     }
 
 
+    @Test
+    @Order(8)
+    void saveMany() throws Exception {
+        BatchEventModel batchEventModel = createBatchEventModel();
+        this.mockMvc.perform(
+                MockMvcRequestBuilders
+                        .post(ENDPOINT.concat("/batch"))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jackson.writeValueAsString(batchEventModel)))
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON));
+    }
+
+
+    private BatchEventModel createBatchEventModel() {
+        return BatchEventModel.builder()
+            .batchId(UUID.randomUUID())
+            .records(
+                List.of(
+                    createRecord(),
+                    createRecord(),
+                    createRecord(),
+                    createRecord()
+                )
+            )
+            .build();
+    }
+    private Record createRecord() {
+        return Record.builder()
+            .transId(UUID.randomUUID())
+            .transTms("Test")
+            .rcNum("10002")
+            .clientId("RPS-0001")
+            .event(
+                List.of(
+                    createEventModel(),
+                    createEventModel(),
+                    createEventModel(),
+                    createEventModel()
+                )
+            ).build();
+    }
     private Event createEvent() {
         return Event.builder()
             .transId(UUID.randomUUID())

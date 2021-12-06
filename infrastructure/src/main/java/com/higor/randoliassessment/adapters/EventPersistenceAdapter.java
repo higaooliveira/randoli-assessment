@@ -46,6 +46,17 @@ public class EventPersistenceAdapter implements EventPersistencePort {
     }
 
     @Override
+    public List<EventModel> saveMany(List<EventModel> eventModels) {
+        List<Event> events = eventModels.stream().map(mapper::convert).collect(Collectors.toList());
+
+        return this.eventRepository
+            .saveAll(events)
+            .stream()
+            .map(mapper::convert)
+            .collect(Collectors.toList());
+    }
+
+    @Override
     public List<EventModel> getAll() {
         return this.eventRepository
             .findAll()
