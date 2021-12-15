@@ -1,6 +1,7 @@
 package com.higor.randoliassessment.adapters;
 
 import com.higor.randoliassessment.entities.Event;
+import com.higor.randoliassessment.exceptions.ResourceNotFound;
 import com.higor.randoliassessment.mapper.Mapper;
 import com.higor.randoliassessment.model.EventModel;
 import com.higor.randoliassessment.ports.EventPersistencePort;
@@ -36,16 +37,9 @@ class EventPersistenceAdapterTest {
 
     private final EventPersistencePort eventPersistenceAdapter = new EventPersistenceAdapter(eventRepository, mapper);
 
-    @BeforeEach
-    void setUp() {
-    }
-
-    @AfterEach
-    void tearDown() {
-    }
 
     @Test
-    void getById() {
+    void getById() throws ResourceNotFound {
         EventModel expectedModel = this.createEventModel();
         expectedModel.setEventId(UUID.randomUUID());
         Optional<Event> expectedEntity = Optional.of(mapper.convert(expectedModel));
@@ -113,7 +107,7 @@ class EventPersistenceAdapterTest {
     }
 
     @Test
-    void delete() {
+    void delete() throws ResourceNotFound {
         UUID id = UUID.randomUUID();
 
         this.eventPersistenceAdapter.delete(id);

@@ -1,6 +1,7 @@
 package com.higor.randoliassessment.services;
 
 import com.higor.randoliassessment.exceptions.InternalServerError;
+import com.higor.randoliassessment.exceptions.ResourceNotFound;
 import com.higor.randoliassessment.model.BatchEventModel;
 import com.higor.randoliassessment.model.EventModel;
 import com.higor.randoliassessment.model.Record;
@@ -28,7 +29,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventModel getById(UUID id) {
+    public EventModel getById(UUID id) throws ResourceNotFound {
 
         return this.eventPersistencePort.getById(id);
     }
@@ -39,7 +40,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventModel> saveMany(BatchEventModel batchEventModel) {
+    public List<EventModel> saveMany(BatchEventModel batchEventModel) throws InternalServerError {
         AtomicReference<List<EventModel>> eventModels  = new AtomicReference<>(new ArrayList<>());
 
         Thread thread = new Thread(() -> {
@@ -73,7 +74,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(UUID id) throws ResourceNotFound {
         this.eventPersistencePort.delete(id);
     }
 }

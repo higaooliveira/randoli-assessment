@@ -13,5 +13,4 @@ public class StandardError {
 
     private Instant timestamp;
     private String message;
-    private String path;
 }

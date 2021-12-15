@@ -1,32 +1,35 @@
 package com.higor.randoliassessment.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.higor.randoliassessment.entities.Event;
 import com.higor.randoliassessment.model.BatchEventModel;
 import com.higor.randoliassessment.model.EventModel;
 import com.higor.randoliassessment.model.Record;
 import com.higor.randoliassessment.repositories.EventRepository;
+import java.net.URI;
 import java.util.List;
 import java.util.UUID;
+import org.apache.camel.CamelContext;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Order;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @TestPropertySource(locations = "classpath:application-test.properties")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -36,38 +39,40 @@ class EventControllerTest {
     @Autowired
     private EventRepository repository;
 
+    @Qualifier("createRestTemplate")
     @Autowired
-    private MockMvc mockMvc;
+    private TestRestTemplate restTemplate;
 
-    private final ObjectMapper jackson = Jackson2ObjectMapperBuilder.json().build();
+    @Autowired
+    protected CamelContext camelContext;
 
-    private static final String ENDPOINT = "/api/event";
+    @LocalServerPort
+    private int randomServerPort;
+
+    private final String baseUrl = "http://localhost:";
 
     private List<Event> events;
 
     @BeforeEach
-    void dataSeed() {
+    void dataSeed() throws Exception {
         this.events = this.repository.saveAll(List.of(createEvent()));
+        camelContext.start();
     }
 
     @AfterEach
-    void flush() {
+    void flush() throws Exception {
         this.repository.flush();
+        camelContext.stop();
     }
 
     @Test
     @Order(1)
     void getById() throws Exception {
         UUID id = events.get(0).getEventId();
-        String json = jackson.writeValueAsString(events.get(0));
 
-        this.mockMvc.perform(
-            MockMvcRequestBuilders
-                .get(ENDPOINT.concat("/").concat(id.toString()))
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(MockMvcResultMatchers.status().isOk())
-            .andExpect(MockMvcResultMatchers.content().string(json));
+        URI uri = new URI(baseUrl + randomServerPort + "/api/event/".concat(id.toString()));
+        ResponseEntity<EventModel> response = restTemplate.getForEntity(uri, EventModel.class);
+        Assertions.assertEquals(200, response.getStatusCodeValue());
     }
 
     @Test
@@ -75,37 +80,35 @@ class EventControllerTest {
     void getById_WithNonExistentId() throws Exception {
         UUID id = UUID.randomUUID();
 
-        this.mockMvc.perform(
-            MockMvcRequestBuilders
-                .get(ENDPOINT.concat("/").concat(id.toString()))
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(MockMvcResultMatchers.status().isNotFound());
+        URI uri = new URI(baseUrl + randomServerPort + "/api/event/".concat(id.toString()));
+        ResponseEntity<EventModel> response = restTemplate.getForEntity(uri, EventModel.class);
+        Assertions.assertEquals(404, response.getStatusCodeValue());
     }
 
     @Test
     @Order(3)
     void getAllEvents() throws Exception {
-        this.mockMvc.perform(
-            MockMvcRequestBuilders
-                .get(ENDPOINT)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(MockMvcResultMatchers.status().isOk());
+        URI uri = new URI(baseUrl + randomServerPort + "/api/event");
+        ResponseEntity<EventModel[]> response = restTemplate.getForEntity(uri, EventModel[].class);
+        Assertions.assertEquals(200, response.getStatusCodeValue());
     }
 
     @Test
     @Order(4)
     void save() throws Exception {
         EventModel eventModel = this.createEventModel();
-        this.mockMvc.perform(
-            MockMvcRequestBuilders
-                .post(ENDPOINT)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(jackson.writeValueAsString(eventModel)))
-            .andExpect(MockMvcResultMatchers.status().isCreated())
-            .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON));
+
+        URI uri = new URI(baseUrl + randomServerPort + "/api/event");
+
+        ResponseEntity<EventModel> response = restTemplate.exchange(
+            String.valueOf(uri),
+            HttpMethod.POST,
+            new HttpEntity<>(eventModel),
+            new ParameterizedTypeReference<>() {
+            }
+        );
+
+        Assertions.assertEquals(200, response.getStatusCodeValue());
     }
 
 
@@ -115,53 +118,69 @@ class EventControllerTest {
         EventModel eventModel = this.createEventModel();
         eventModel.setEventId(events.get(0).getEventId());
 
-        this.mockMvc.perform(
-            MockMvcRequestBuilders
-                .put(ENDPOINT)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(jackson.writeValueAsString(eventModel)))
-            .andExpect(MockMvcResultMatchers.status().isOk())
-            .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON));
+        URI uri = new URI(baseUrl + randomServerPort + "/api/event");
+
+        ResponseEntity<EventModel> response = restTemplate.exchange(
+            String.valueOf(uri),
+            HttpMethod.PUT,
+            new HttpEntity<>(eventModel),
+            new ParameterizedTypeReference<>() {
+            }
+        );
+
+        Assertions.assertEquals(200, response.getStatusCodeValue());
     }
 
     @Test
     @Order(6)
     void delete() throws Exception {
         UUID id = events.get(0).getEventId();
-        this.mockMvc.perform(
-            MockMvcRequestBuilders
-                .delete(ENDPOINT.concat("/").concat(id.toString()))
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(MockMvcResultMatchers.status().isNoContent());
+
+        URI uri = new URI(baseUrl + randomServerPort + "/api/event/".concat(id.toString()));
+
+        ResponseEntity<EventModel> response = restTemplate.exchange(
+            String.valueOf(uri),
+            HttpMethod.DELETE,
+            null,
+            new ParameterizedTypeReference<>() {}
+        );
+
+        Assertions.assertEquals(204, response.getStatusCodeValue());
     }
 
     @Test
     @Order(7)
     void deleteNonexistentId() throws Exception {
         UUID id = UUID.randomUUID();
-        this.mockMvc.perform(
-            MockMvcRequestBuilders
-                .delete(ENDPOINT.concat("/").concat(id.toString()))
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(MockMvcResultMatchers.status().isNotFound());
-    }
 
+        URI uri = new URI(baseUrl + randomServerPort + "/api/event/".concat(id.toString()));
+
+        ResponseEntity<EventModel> response = restTemplate.exchange(
+            String.valueOf(uri),
+            HttpMethod.DELETE,
+            null,
+            new ParameterizedTypeReference<>() {}
+        );
+
+        Assertions.assertEquals(404, response.getStatusCodeValue());
+    }
 
     @Test
     @Order(8)
     void saveMany() throws Exception {
         BatchEventModel batchEventModel = createBatchEventModel();
-        this.mockMvc.perform(
-                MockMvcRequestBuilders
-                        .post(ENDPOINT.concat("/batch"))
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(jackson.writeValueAsString(batchEventModel)))
-                .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON));
+
+
+        URI uri = new URI(baseUrl + randomServerPort + "/api/event/batch");
+
+        ResponseEntity<List<EventModel>> response = restTemplate.exchange(
+            String.valueOf(uri),
+            HttpMethod.POST,
+            new HttpEntity<>(batchEventModel),
+            new ParameterizedTypeReference<>() {}
+        );
+
+        Assertions.assertEquals(200, response.getStatusCodeValue());
     }
 
 
@@ -221,4 +240,3 @@ class EventControllerTest {
             .build();
     }
 }
-

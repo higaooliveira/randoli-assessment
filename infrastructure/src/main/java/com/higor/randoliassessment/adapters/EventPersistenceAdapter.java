@@ -31,7 +31,7 @@ public class EventPersistenceAdapter implements EventPersistencePort {
     private final Mapper mapper;
 
     @Override
-    public EventModel getById(UUID id) {
+    public EventModel getById(UUID id) throws ResourceNotFound {
         return this.eventRepository
             .findById(id)
             .map(mapper::convert)
@@ -73,7 +73,7 @@ public class EventPersistenceAdapter implements EventPersistencePort {
     }
 
     @Override
-    public void delete(UUID eventId) {
+    public void delete(UUID eventId) throws ResourceNotFound {
         try {
             this.eventRepository.deleteById(eventId);
         }catch (EmptyResultDataAccessException ex) {

@@ -1,5 +1,6 @@
 package com.higor.randoliassessment.ports;
 
+import com.higor.randoliassessment.exceptions.ResourceNotFound;
 import com.higor.randoliassessment.model.EventModel;
 
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.UUID;
 
 public interface EventPersistencePort {
 
-    EventModel getById(UUID id);
+    EventModel getById(UUID id) throws ResourceNotFound;
 
     EventModel save(EventModel eventModel);
 
@@ -18,6 +19,6 @@ public interface EventPersistencePort {
 
     EventModel update(EventModel eventModel);
 
-    void delete(UUID eventId);
+    void delete(UUID eventId) throws ResourceNotFound;
 
 }

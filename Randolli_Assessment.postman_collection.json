@@ -56,14 +56,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{URL}}/api/event/89c65e41-7832-4fe3-bf73-af145beb8a18",
+					"raw": "{{URL}}/api/event/d9c73f95-1988-4294-9e35-492c12efc9ce",
 					"host": [
 						"{{URL}}"
 					],
 					"path": [
 						"api",
 						"event",
-						"89c65e41-7832-4fe3-bf73-af145beb8a18"
+						"d9c73f95-1988-4294-9e35-492c12efc9ce"
 					]
 				}
 			},
@@ -76,7 +76,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"eventId\": \"89c65e41-7832-4fe3-bf73-af145beb8a18\",\n    \"transId\":\"0000abf8-d1f5-4536-8fb0-36fe934b1f28\",\n    \"transTms\": \"Teste\",\n    \"rcNum\": \"1002\",\n    \"clientId\": \"RPS-0001\",\n    \"eventCnt\": 1,\n    \"locationCd\": \"DESTINATION\",\n    \"locationId1\": \"T8C\",\n    \"locationId2\": \"1J7\",\n    \"addrNbr\": \"0000000001\"\n}",
+					"raw": "{\n    \"eventId\": \"d9c73f95-1988-4294-9e35-492c12efc9ce\",\n    \"transId\":\"0000abf8-d1f5-4536-8fb0-36fe934b1f28\",\n    \"transTms\": \"Teste3\",\n    \"rcNum\": \"1003\",\n    \"clientId\": \"Randoli-Id\",\n    \"eventCnt\": 1,\n    \"locationCd\": \"SOURCE\",\n    \"locationId1\": \"T8C\",\n    \"locationId2\": \"1J7\",\n    \"addrNbr\": \"0000000001\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -99,18 +99,47 @@
 		{
 			"name": "create Batch",
 			"request": {
-				"method": "GET",
+				"method": "POST",
 				"header": [],
-				"url": null
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"batchId\": \"0310abf6-d1f5-a1b3-8fb0-36fe934b1f28\",\n    \"records\": [\n        {\n            \"transId\": \"0000abf8-d1f5-4536-8fb0-36fe934b1f28\",\n            \"transTms\": \"20151022102011927EDT\",\n            \"rcNum\": \"10002\",\n            \"clientId\": \"RPS-00001\",\n            \"event\": [\n                {\n                    \"eventCnt\": 1,\n                    \"locationCd\": \"DESTINATION\",\n                    \"locationId1\": \"T8C\",\n                    \"locationId2\": \"1J7\",\n                    \"addrNbr\": \"0000000001\"\n                },\n                {\n                    \"eventCnt\": 1,\n                    \"locationCd\": \"CUSTOMER NUMBER\",\n                    \"locationId1\": \"0007316971\"\n                },\n                {\n                    \"eventCnt\": 1,\n                    \"locationCd\": \"OUTLET ID\",\n                    \"locationId1\": \"I029\"\n                }\n            ]\n        },\n        {\n            \"transId\": \"0000abf8-d1f5-4536-8fb0-36fe934b1f28\",\n            \"transTms\": \"20151022102011927EDT\",\n            \"rcNum\": \"10002\",\n            \"clientId\": \"RPS-00001\",\n            \"event\": [\n                {\n                    \"eventCnt\": 1,\n                    \"locationCd\": \"DESTINATION\",\n                    \"locationId1\": \"T8C\",\n                    \"locationId2\": \"1J7\",\n                    \"addrNbr\": \"0000000001\"\n                },\n                {\n                    \"eventCnt\": 1,\n                    \"locationCd\": \"CUSTOMER NUMBER\",\n                    \"locationId1\": \"0007316971\"\n                },\n                {\n                    \"eventCnt\": 1,\n                    \"locationCd\": \"OUTLET ID\",\n                    \"locationId1\": \"I029\"\n                }\n            ]\n        },\n        {\n            \"transId\": \"0000abf8-d1f5-4536-8fb0-36fe934b1f28\",\n            \"transTms\": \"20151022102011927EDT\",\n            \"rcNum\": \"10002\",\n            \"clientId\": \"RPS-00001\",\n            \"event\": [\n                {\n                    \"eventCnt\": 1,\n                    \"locationCd\": \"DESTINATION\",\n                    \"locationId1\": \"T8C\",\n                    \"locationId2\": \"1J7\",\n                    \"addrNbr\": \"0000000001\"\n                },\n                {\n                    \"eventCnt\": 1,\n                    \"locationCd\": \"CUSTOMER NUMBER\",\n                    \"locationId1\": \"0007316971\"\n                },\n                {\n                    \"eventCnt\": 1,\n                    \"locationCd\": \"OUTLET ID\",\n                    \"locationId1\": \"I029\"\n                }\n            ]\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/api/event/batch",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"event",
+						"batch"
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "Delete Event",
 			"request": {
-				"method": "GET",
+				"method": "DELETE",
 				"header": [],
-				"url": null
+				"url": {
+					"raw": "{{URL}}/api/event/93ac50c5-15e4-45e1-a8f3-8fc53d30dc4a",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"event",
+						"93ac50c5-15e4-45e1-a8f3-8fc53d30dc4a"
+					]
+				}
 			},
 			"response": []
 		}

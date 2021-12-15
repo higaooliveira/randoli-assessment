@@ -104,7 +104,7 @@ class EventServiceImplTest {
     }
 
     @Test
-    void getById() {
+    void getById() throws ResourceNotFound {
         UUID id = UUID.randomUUID();
         EventModel expectedModel = this.createEventModel(
             id,
@@ -128,7 +128,7 @@ class EventServiceImplTest {
     }
 
     @Test
-    void getByNonexistentId() {
+    void getByNonexistentId() throws ResourceNotFound {
         UUID id = UUID.randomUUID();
 
         BDDMockito
@@ -201,7 +201,7 @@ class EventServiceImplTest {
     }
 
     @Test
-    void delete() {
+    void delete() throws ResourceNotFound {
         UUID id = UUID.randomUUID();
 
         this.eventService.delete(id);
